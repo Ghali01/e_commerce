@@ -20,61 +20,58 @@ class ProductsList extends StatelessWidget {
     return BlocProvider(
       key: ValueKey(category),
       create: (context) => ProductsListBloc(category)..load(),
-      child: Scaffold(
-        body: BlocBuilder<ProductsListBloc, ProductsListState>(
-          builder: (context, state) {
-            if (state is ProductsListLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            if (state is ProductsListError) {
-              return LoadingError(
-                retryCallback: () => context.read<ProductsListBloc>().load(),
-                error: state.message,
-              );
-            }
-            if (state is ProductsListLoaded) {
-              return ListView.builder(
-                itemCount: state.productsList.length,
-                itemBuilder: (context, index) {
-                  final product = state.productsList[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () => Navigator.of(context).pushNamed(
-                          AppRoutes.product,
-                          arguments: ProductArgs(id: product.id)),
-                      child: Card(
-                        child: ListTile(
-                          leading: SizedBox(
-                            width: 60,
-                            child: Image.network(
-                              product.image,
-                              loadingBuilder: (context, child,
-                                      loadingProgress) =>
-                                  loadingProgress == null
-                                      ? child
-                                      : const Center(
-                                          child: CircularProgressIndicator()),
-                            ),
+      child: BlocBuilder<ProductsListBloc, ProductsListState>(
+        builder: (context, state) {
+          if (state is ProductsListLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is ProductsListError) {
+            return LoadingError(
+              retryCallback: () => context.read<ProductsListBloc>().load(),
+              error: state.message,
+            );
+          }
+          if (state is ProductsListLoaded) {
+            return ListView.builder(
+              itemCount: state.productsList.length,
+              itemBuilder: (context, index) {
+                final product = state.productsList[index];
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    onTap: () => Navigator.of(context).pushNamed(
+                        AppRoutes.product,
+                        arguments: ProductArgs(id: product.id)),
+                    child: Card(
+                      child: ListTile(
+                        leading: SizedBox(
+                          width: 60,
+                          child: Image.network(
+                            product.image,
+                            loadingBuilder: (context, child, loadingProgress) =>
+                                loadingProgress == null
+                                    ? child
+                                    : const Center(
+                                        child: CircularProgressIndicator()),
                           ),
-                          title: Text(product.title),
-                          subtitle: Text(
-                            product.description,
-                            maxLines: 3,
-                          ),
-                          trailing: Text("${product.price}\$"),
                         ),
+                        title: Text(product.title),
+                        subtitle: Text(
+                          product.description,
+                          maxLines: 3,
+                        ),
+                        trailing: Text("${product.price}\$"),
                       ),
                     ),
-                  );
-                },
-              );
-            }
-            return Container();
-          },
-        ),
+                  ),
+                );
+              },
+            );
+          }
+          return Container();
+        },
       ),
     );
   }

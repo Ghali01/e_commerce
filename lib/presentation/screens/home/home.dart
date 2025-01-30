@@ -1,8 +1,9 @@
+import 'package:e_commerce/core/routes.dart';
 import 'package:e_commerce/presentation/screens/home/categories_list.dart';
 import 'package:e_commerce/presentation/screens/home/products_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:e_commerce/logic/controllers/home/home.dart';
 import 'package:e_commerce/logic/data/models/category.dart';
 import 'package:e_commerce/logic/data/states/home/home.dart';
@@ -20,7 +21,10 @@ class HomeScreen extends StatelessWidget {
           title: const Text('Store'),
           actions: [
             IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-            IconButton(onPressed: () {}, icon: Icon(Icons.store)),
+            IconButton(
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(AppRoutes.cart),
+                icon: Icon(FontAwesomeIcons.cartShopping)),
           ],
         ),
         body: BlocBuilder<HomeBloc, HomeState>(
@@ -50,7 +54,6 @@ class HomeScreen extends StatelessWidget {
                           return (state as HomeLoaded).selectedCategory;
                         },
                         builder: (context, state) {
-                          print('ss');
                           return ProductsList(category: state);
                         },
                       ),

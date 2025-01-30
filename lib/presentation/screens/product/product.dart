@@ -31,7 +31,9 @@ class ProductScreen extends StatelessWidget {
             IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
           ],
         ),
-        body: BlocBuilder<ProductBloc, ProductState>(
+        body: BlocConsumer<ProductBloc, ProductState>(
+          listenWhen: (previous, current) => current is ProductAddedToCart,
+          listener: (context, state) => Navigator.of(context).pop(),
           builder: (context, state) {
             if (state is ProductLoading) {
               return const Center(
@@ -146,7 +148,9 @@ class ProductScreen extends StatelessWidget {
                   ),
 
                   ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<ProductBloc>().addToCart();
+                      },
                       label: const Text('Add to cart'),
                       icon: const Icon(Icons.add_shopping_cart))
                 ],
