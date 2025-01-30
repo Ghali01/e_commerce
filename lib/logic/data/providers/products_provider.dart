@@ -55,6 +55,30 @@ class ProductsProvider {
     }
   }
 
+  Future<Either<Failure, Product>> getProduct(int id) async {
+    try {
+      //get data from the repository
+      final Map rawData = await repository.getProduct(id);
+      //convert the  map to a products
+      final data = Product.fromMap(rawData);
+      return Right(data);
+    } on ServerException catch (e) {
+      //handle the exceptions
+      if (e.code == 500) {
+        return Left(
+            Failure(code: e.code, message: "The server is down currently"));
+      }
+      if (e.code == 404) {
+        return Left(Failure(code: e.code, message: e.message));
+      }
+
+      return Left(Failure(code: e.code, message: "An server error occurred"));
+    } catch (e) {
+      debugPrint(e);
+      return const Left(Failure(code: 100, message: "An error occurred"));
+    }
+  }
+
   Future<Either<Failure, List<Category>>> getCategories() async {
     try {
       final List<String> rawData = await repository.getCategories();

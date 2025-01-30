@@ -1,3 +1,5 @@
+import 'package:e_commerce/core/routes.dart';
+import 'package:e_commerce/presentation/screens/product/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,25 +41,31 @@ class ProductsList extends StatelessWidget {
                   final product = state.productsList[index];
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      child: ListTile(
-                        leading: SizedBox(
-                          width: 60,
-                          child: Image.network(
-                            product.image,
-                            loadingBuilder: (context, child, loadingProgress) =>
-                                loadingProgress == null
-                                    ? child
-                                    : const Center(
-                                        child: CircularProgressIndicator()),
+                    child: InkWell(
+                      onTap: () => Navigator.of(context).pushNamed(
+                          AppRoutes.product,
+                          arguments: ProductArgs(id: product.id)),
+                      child: Card(
+                        child: ListTile(
+                          leading: SizedBox(
+                            width: 60,
+                            child: Image.network(
+                              product.image,
+                              loadingBuilder: (context, child,
+                                      loadingProgress) =>
+                                  loadingProgress == null
+                                      ? child
+                                      : const Center(
+                                          child: CircularProgressIndicator()),
+                            ),
                           ),
+                          title: Text(product.title),
+                          subtitle: Text(
+                            product.description,
+                            maxLines: 3,
+                          ),
+                          trailing: Text("${product.price}\$"),
                         ),
-                        title: Text(product.title),
-                        subtitle: Text(
-                          product.description,
-                          maxLines: 3,
-                        ),
-                        trailing: Text("${product.price}\$"),
                       ),
                     ),
                   );

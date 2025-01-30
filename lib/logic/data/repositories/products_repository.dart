@@ -41,6 +41,25 @@ class ProductsRepository {
     }
   }
 
+  Future<Map> getProduct(int id) async {
+    try {
+      final response =
+          await http.get(Uri.parse('https://fakestoreapi.com/products/$id'));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data;
+      } else if (response.statusCode == 500) {
+        throw ServerException(code: 500, message: 'Internal Server Error');
+      } else if (response.statusCode == 404) {
+        throw ServerException(code: 404, message: 'Product not found');
+      } else {
+        throw ServerException(code: 400, message: 'An error occurred');
+      }
+    } catch (e) {
+      throw ServerException(code: 400, message: 'An error occurred');
+    }
+  }
+
   Future<List<String>> getCategories() async {
     try {
       final response = await http
