@@ -95,4 +95,23 @@ class ProductsProvider {
       return const Left(Failure(code: 100, message: "An error occurred"));
     }
   }
+
+  //add new product
+  Future<Either<Failure, void>> addProduct(Product product) async {
+    try {
+      await repository.addProduct(product.toMap());
+      return const Right(null);
+    } on ServerException catch (e) {
+      if (e.code == 500) {
+        return Left(
+            Failure(code: e.code, message: "The server is down currently"));
+      } else if (e.code == 400) {
+        return Left(Failure(code: e.code, message: e.message));
+      }
+      return Left(Failure(code: e.code, message: "An server error occurred"));
+    } catch (e) {
+      debugPrint(e);
+      return const Left(Failure(code: 100, message: "An error occurred"));
+    }
+  }
 }

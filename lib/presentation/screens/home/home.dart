@@ -20,7 +20,10 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Store'),
           actions: [
-            IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+            IconButton(
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(AppRoutes.addProduct),
+                icon: Icon(Icons.add)),
             IconButton(
                 onPressed: () =>
                     Navigator.of(context).pushNamed(AppRoutes.cart),

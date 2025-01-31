@@ -80,7 +80,20 @@ class ProductsRepository {
     } else if (response.statusCode == 500) {
       throw ServerException(code: 500, message: 'Internal Server Error');
     } else {
-      print(response.body);
+      throw ServerException(code: 400, message: 'An error occurred');
+    }
+  }
+
+  //add new product
+  Future<void> addProduct(Map product) async {
+    final response = await http.post(
+        Uri.parse('https://fakestoreapi.com/products'),
+        body: jsonEncode(product));
+    if (response.statusCode == 200) {
+      return;
+    } else if (response.statusCode == 500) {
+      throw ServerException(code: 500, message: 'Internal Server Error');
+    } else {
       throw ServerException(code: 400, message: 'An error occurred');
     }
   }
