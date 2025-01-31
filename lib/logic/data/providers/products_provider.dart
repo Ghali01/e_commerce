@@ -9,6 +9,7 @@ import 'package:e_commerce/logic/data/repositories/products_repository.dart';
 class ProductsProvider {
   final repository = ProductsRepository();
 
+  //get all products
   Future<Either<Failure, List<Product>>> getAllProducts() async {
     try {
       //get data from the repository
@@ -30,6 +31,7 @@ class ProductsProvider {
     }
   }
 
+  /// get the products of a certain category
   Future<Either<Failure, List<Product>>> getCategoryProducts(
       Category category) async {
     try {
@@ -55,6 +57,7 @@ class ProductsProvider {
     }
   }
 
+  /// get a single product
   Future<Either<Failure, Product>> getProduct(int id) async {
     try {
       //get data from the repository
@@ -79,6 +82,7 @@ class ProductsProvider {
     }
   }
 
+  /// get all categories
   Future<Either<Failure, List<Category>>> getCategories() async {
     try {
       final List<String> rawData = await repository.getCategories();
@@ -96,7 +100,7 @@ class ProductsProvider {
     }
   }
 
-  //add new product
+  ///add new product
   Future<Either<Failure, void>> addProduct(Product product) async {
     try {
       await repository.addProduct(product.toMap());

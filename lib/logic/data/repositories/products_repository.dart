@@ -6,7 +6,13 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class ProductsRepository {
+  /// Gets all products from the api
+  ///
+  /// Throws a [ServerException] if the server returns a non-200 status code
+  ///
+  /// Returns a [List] of [Map]s, where each [Map] represents a product.
   Future<List<Map>> getAllProducts() async {
+    //Send the http request
     final response =
         await http.get(Uri.parse('https://fakestoreapi.com/products'));
     if (response.statusCode == 200) {
@@ -19,8 +25,14 @@ class ProductsRepository {
     }
   }
 
+  /// Gets all products from a certain category from the api
+  ///
+  /// Throws a [ServerException] if the server returns a non-200 status code
+  ///
+  /// Returns a [List] of [Map]s, where each [Map] represents a product.
   Future<List<Map>> getCategoryProducts(Category category) async {
     try {
+      //Send the http request
       final response = await http.get(Uri.parse(
           'https://fakestoreapi.com/products/category/${category.name}'));
       if (response.statusCode == 200) {
@@ -38,7 +50,13 @@ class ProductsRepository {
     }
   }
 
+  /// Gets a product with the given [id] from the api
+  ///
+  /// Throws a [ServerException] if the server returns a non-200 status code
+  ///
+  /// Returns a [Map] representing the product.
   Future<Map> getProduct(int id) async {
+    //Send the http request
     final response =
         await http.get(Uri.parse('https://fakestoreapi.com/products/$id'));
     if (response.statusCode == 200) {
@@ -52,6 +70,15 @@ class ProductsRepository {
       throw ServerException(code: 400, message: 'An error occurred');
     }
   }
+
+  /// Fetches the list of product categories from the API.
+  ///
+  /// Sends a GET request to the 'fakestoreapi.com' to retrieve all available
+  /// product categories.
+  ///
+  /// Throws a [ServerException] if the server returns a non-200 status code.
+  ///
+  /// Returns a [List] of [String]s where each [String] is a category name.
 
   Future<List<String>> getCategories() async {
     final response = await http
@@ -67,6 +94,13 @@ class ProductsRepository {
   }
 
   //add cart
+  /// Adds a cart with the specified list of items to the API.
+  ///
+  /// Sends a POST request to 'fakestoreapi.com/carts' with the current date
+  /// and a list of products.
+  ///
+  /// Throws a [ServerException] if the server returns a non-200 status code.
+
   Future<void> addCart(List<Map> items) async {
     //get today date and format it
     final DateFormat dateFormat = DateFormat.yMd();
@@ -85,6 +119,12 @@ class ProductsRepository {
   }
 
   //add new product
+  /// Adds a new product to the API.
+  ///
+  /// Sends a POST request to 'fakestoreapi.com/products' with the given
+  /// product.
+  ///
+  /// Throws a [ServerException] if the server returns a non-200 status code.
   Future<void> addProduct(Map product) async {
     final response = await http.post(
         Uri.parse('https://fakestoreapi.com/products'),

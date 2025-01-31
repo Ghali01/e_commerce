@@ -18,7 +18,7 @@ class CartRepository {
 ''');
   }
 
-  //insert cart item
+  /// Insert a new cart item into the database.
   Future<void> insertCartItem(Map<String, dynamic> cartItem) async {
     final db = await _db;
     await db.insert('cart_items', cartItem);
